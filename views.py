@@ -34,17 +34,14 @@ class DynamicModelViewSet(DynamicModelViewSet):
     def dispatch(self, request, *args, **kwargs):
         """ Custom Dispatch Method """
 
-        # Get query params
-        request_get = request.GET
+        # Get headers
+        headers = request.META
 
-        # Make query params mutable
-        request_get._mutable = True
+        # Get content case
+        content_case = headers.get("HTTP_CONTENT_CASE", "json/snake").lower().strip()
 
-        # Check if case is specified
-        _case = request.GET.pop("_case", ["snake"])[0].lower().strip()
-
-        # Check if case is camel
-        if _case == "camel":
+        # Check if content case is camel
+        if content_case == "json/camel":
 
             # Set camel case renderer class
             self.renderer_classes = (JSONCamelCaseRenderer,)
@@ -56,13 +53,13 @@ class DynamicModelViewSet(DynamicModelViewSet):
             request_get = QueryDict("", mutable=True)
 
             # Snakeify query params
-            request_get.update(snakeify_data(request_get.dict()))
+            request_get.update(snakeify_data(request.GET.dict()))
 
-        # Ensure that query dict is immutable
-        request_get._mutable = False
+            # Ensure that query dict is immutable
+            request_get._mutable = False
 
-        # Redefine query params
-        request.GET = request_get
+            # Redefine query params
+            request.GET = request_get
 
         # Return parent dispatch method
         return super().dispatch(request, *args, **kwargs)
