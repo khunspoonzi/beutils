@@ -10,6 +10,10 @@ from django.http import QueryDict
 
 from dynamic_rest.viewsets import DynamicModelViewSet
 
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.response import Response
+
 # -------------------------------------------------------------------------------------
 # PROJECT IMPORTS
 # -------------------------------------------------------------------------------------
@@ -20,12 +24,11 @@ from beutils.renderers import JSONCamelCaseRenderer
 
 
 # -------------------------------------------------------------------------------------
-# DYNAMIC MODEL VIEWSET
+# CONTENT CASE VIEWSET MIXIN
 # -------------------------------------------------------------------------------------
 
 
-class DynamicModelViewSet(DynamicModelViewSet):
-    """ A custom dynamic model viewset class  """
+class ContentCaseViewSetMixin:
 
     # ---------------------------------------------------------------------------------
     # DISPATCH
@@ -63,3 +66,58 @@ class DynamicModelViewSet(DynamicModelViewSet):
 
         # Return parent dispatch method
         return super().dispatch(request, *args, **kwargs)
+
+
+# -------------------------------------------------------------------------------------
+# MODEL VIEWSET
+# -------------------------------------------------------------------------------------
+
+
+class ModelViewSet(ContentCaseViewSetMixin, DynamicModelViewSet):
+    """ A custom model viewset class """
+
+
+# -------------------------------------------------------------------------------------
+# OBTAIN AUTH TOKEN BASE
+# -------------------------------------------------------------------------------------
+
+
+class ObtainAuthTokenBase(ContentCaseViewSetMixin, ObtainAuthToken):
+
+    # ---------------------------------------------------------------------------------
+    # POST
+    # ---------------------------------------------------------------------------------
+
+    def post(self, request, *args, **kwargs):
+
+        # Get serializer
+        serializer = self.serializer_class(
+            data=request.data, context={"request": request}
+        )
+
+        # Validate serializer
+        serializer.is_valid(raise_exception=True)
+
+        # Get user
+        user = serializer.validated_data["user"]
+
+        # Get or create token
+        token, created = Token.objects.get_or_create(user=user)
+
+        # Initialize response
+        response = {"token": token.key}
+
+        # Update response
+        response = self.update_response(response, user)
+
+        # Return response
+        return Response(response)
+
+    # ---------------------------------------------------------------------------------
+    # UPDATE RESPONSE
+    # ---------------------------------------------------------------------------------
+
+    def update_response(self, response, user):
+
+        # Return response by default
+        return response

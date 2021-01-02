@@ -98,8 +98,6 @@ def caseify_data(data: Dict, caseify_func: Callable) -> Optional[Dict]:
             # Add to caseified data
             caseified_data[caseified_key] = value
 
-            print(caseified_data)
-
             # Continue here
             continue
 
