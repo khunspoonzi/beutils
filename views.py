@@ -10,6 +10,7 @@ from django.http import QueryDict
 
 from dynamic_rest.viewsets import DynamicModelViewSet
 
+from rest_framework import filters
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
@@ -75,6 +76,13 @@ class ContentCaseViewSetMixin:
 
 class ModelViewSet(ContentCaseViewSetMixin, DynamicModelViewSet):
     """ A custom model viewset class """
+
+    # ---------------------------------------------------------------------------------
+    # CLASS ATTRIBUTES
+    # ---------------------------------------------------------------------------------
+
+    # Define filter backends
+    filter_backends = [filters.SearchFilter]
 
 
 # -------------------------------------------------------------------------------------
