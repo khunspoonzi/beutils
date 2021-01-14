@@ -23,7 +23,7 @@ class DescriptionModel(models.Model):
     # DESCRIPTION
     # ---------------------------------------------------------------------------------
 
-    description = models.TextField()
+    description = models.TextField(blank=True)
 
     # ---------------------------------------------------------------------------------
     # META
