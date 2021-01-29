@@ -12,6 +12,12 @@ import re
 
 from typing import Dict, Callable, Optional
 
+# -------------------------------------------------------------------------------------
+# DJANGO IMPORTS
+# -------------------------------------------------------------------------------------
+
+from django.http import QueryDict
+
 
 # -------------------------------------------------------------------------------------
 # CAMELIZE STRING
@@ -47,12 +53,18 @@ def snakeify_string(string: str) -> str:
 
 def caseify_data(data: Dict, caseify_func: Callable) -> Optional[Dict]:
 
-    # Initialize caseified data
-    caseified_data = {}
-
     # Return if data is None
     if data is None:
         return
+
+    # Check if QueryDict
+    is_querydict = type(data) is QueryDict
+
+    # Coerce data to dict
+    data = dict(data) if is_querydict else data
+
+    # Initialize caseified data
+    caseified_data = QueryDict("", mutable=True) if is_querydict else {}
 
     # ---------------------------------------------------------------------------------
     # CASE OF LIST
@@ -122,8 +134,17 @@ def caseify_data(data: Dict, caseify_func: Callable) -> Optional[Dict]:
                 # Add item to new value
                 new_value.append(item)
 
-            # Add new value to casified data
-            caseified_data[caseified_key] = new_value
+            # Check if dealing with a QueryDict
+            if is_querydict:
+
+                # Add new value to caseified data
+                caseified_data.setlist(caseified_key, new_value)
+
+            # Handle all other cases
+            else:
+
+                # Add new value to caseified data
+                caseified_data[caseified_key] = new_value
 
         # Otherwise check if value is a dict
         elif isinstance(value, dict):
@@ -135,6 +156,13 @@ def caseify_data(data: Dict, caseify_func: Callable) -> Optional[Dict]:
     # RETURN CASEIFIED DATA
     # ---------------------------------------------------------------------------------
 
+    # Check if caseified data is a QueryDict
+    if is_querydict:
+
+        # Make caseified data immutable
+        caseified_data._mutable = False
+
+    # Return caseified data
     return caseified_data
 
 

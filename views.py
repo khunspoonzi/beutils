@@ -10,9 +10,10 @@ from django.http import QueryDict
 
 from dynamic_rest.viewsets import DynamicModelViewSet
 
-from rest_framework import filters
+from rest_framework import filters, status
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 # -------------------------------------------------------------------------------------
@@ -22,6 +23,7 @@ from rest_framework.response import Response
 from beutils.cases import snakeify_data
 from beutils.parsers import JSONSnakeCaseParser
 from beutils.renderers import JSONCamelCaseRenderer
+from beutils.serializers import IdListSerializer
 
 
 # -------------------------------------------------------------------------------------
@@ -53,17 +55,8 @@ class ContentCaseViewSetMixin:
             # Set camel case parser class
             self.parser_classes = (JSONSnakeCaseParser,)
 
-            # Initialize new query dict
-            request_get = QueryDict("", mutable=True)
-
-            # Snakeify query params
-            request_get.update(snakeify_data(request.GET.dict()))
-
-            # Ensure that query dict is immutable
-            request_get._mutable = False
-
             # Redefine query params
-            request.GET = request_get
+            request.GET = snakeify_data(request.GET)
 
         # Return parent dispatch method
         return super().dispatch(request, *args, **kwargs)
@@ -81,8 +74,34 @@ class ModelViewSet(ContentCaseViewSetMixin, DynamicModelViewSet):
     # CLASS ATTRIBUTES
     # ---------------------------------------------------------------------------------
 
-    # Define filter backends
-    filter_backends = [filters.SearchFilter]
+    # Apply search filter backend
+    filter_backends = DynamicModelViewSet.filter_backends + (filters.SearchFilter,)
+
+    # ---------------------------------------------------------------------------------
+    # BULK DELETE
+    # ---------------------------------------------------------------------------------
+
+    # /api/v1/{{ model }}/bulk-delete/
+    @action(
+        detail=False,
+        methods=("post",),
+        url_path="bulk-delete",
+    )
+    def bulk_delete(self, request, *args, **kwargs):
+
+        # Get serializer
+        # Dynamic mixin does not play well with non-model serializer
+        # Avoid setting serializer class directly in action
+        serializer = IdListSerializer(data=request.data)
+
+        # Validate serializer
+        serializer.is_valid(raise_exception=True)
+
+        # Delete requested objects
+        self.get_queryset().filter(id__in=serializer.validated_data["ids"]).delete()
+
+        # Return 204 response
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # -------------------------------------------------------------------------------------
