@@ -31,8 +31,8 @@ class DefaultPagination(DynamicPageNumberPagination):
         """ Constructs the meta data for the paginated response """
 
         return {
-            "total_results": self.page.paginator.count,
-            "total_pages": self.page.paginator.num_pages,
             self.page_query_param: self.page.number,
             self.page_size_query_param: self.get_page_size(self.request),
+            "page_count": self.page.paginator.num_pages,
+            "result_count": self.page.paginator.count,
         }
