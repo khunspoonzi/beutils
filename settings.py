@@ -126,10 +126,11 @@ INSTALLED_APPS = [
     # Django Storages
     "storages",
     # Django REST Framework
+    "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
     "dynamic_rest",
-    "corsheaders",
+    "drf_multiple_model",
 ]
 
 # -------------------------------------------------------------------------------------
