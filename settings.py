@@ -70,6 +70,9 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Allowed Hosts
 ALLOWED_HOSTS = [h.strip() for h in config("ALLOWED_HOSTS", default="").split(",")]
 
+# Internal IPs (Django Debug Toolbar)
+INTERNAL_IPS = ["127.0.0.1"]
+
 # Staging and Production Environments
 if ENVIRONMENT in [STAGING, PRODUCTION]:
 
@@ -121,6 +124,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Django Debug Toolbar
+    "debug_toolbar",
     # Django Extensions
     "django_extensions",
     # Django Storages
@@ -146,6 +151,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 # -------------------------------------------------------------------------------------
