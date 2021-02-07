@@ -1,5 +1,5 @@
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │DJANGO REST FRAMEWORK IMPORTS │
+# │DJANGO REST FRAMEWORK IMPORTS                                                       │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 from dynamic_rest.viewsets import DynamicModelViewSet
@@ -11,7 +11,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │PROJECT IMPORTS │
+# │PROJECT IMPORTS                                                                     │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 from beutils.cases import snakeify_data
@@ -21,14 +21,14 @@ from beutils.serializers import IdListSerializer
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │CONTENT CASE VIEWSET MIXIN │
+# │CONTENT CASE VIEWSET MIXIN                                                          │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
 class ContentCaseViewSetMixin:
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │DISPATCH │
+    # │DISPATCH                                                                        │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     def dispatch(self, request, *args, **kwargs):
@@ -57,7 +57,7 @@ class ContentCaseViewSetMixin:
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │MODEL VIEWSET │
+# │MODEL VIEWSET                                                                       │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -65,14 +65,14 @@ class ModelViewSet(ContentCaseViewSetMixin, DynamicModelViewSet):
     """ A custom model viewset class """
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │CLASS ATTRIBUTES │
+    # │CLASS ATTRIBUTES                                                                │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     # Apply search filter backend
     filter_backends = DynamicModelViewSet.filter_backends + (filters.SearchFilter,)
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │BULK DELETE │
+    # │BULK DELETE                                                                     │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     # /api/v1/{{ model }}/bulk-delete/
@@ -99,14 +99,14 @@ class ModelViewSet(ContentCaseViewSetMixin, DynamicModelViewSet):
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │OBTAIN AUTH TOKEN BASE │
+# │OBTAIN AUTH TOKEN BASE                                                              │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
 class ObtainAuthTokenBase(ContentCaseViewSetMixin, ObtainAuthToken):
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │POST │
+    # │POST                                                                            │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     def post(self, request, *args, **kwargs):
@@ -135,7 +135,7 @@ class ObtainAuthTokenBase(ContentCaseViewSetMixin, ObtainAuthToken):
         return Response(response)
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │UPDATE RESPONSE │
+    # │UPDATE RESPONSE                                                                 │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     def update_response(self, response, user):

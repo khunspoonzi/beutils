@@ -1,5 +1,5 @@
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │DJANGO REST FRAMEWORK IMPORTS │
+# │DJANGO REST FRAMEWORK IMPORTS                                                       │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 from drf_multiple_model.pagination import MultipleModelLimitOffsetPagination
@@ -7,13 +7,13 @@ from dynamic_rest.pagination import DynamicPageNumberPagination
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │CONSTANTS │
+# │CONSTANTS                                                                           │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 RESULT_COUNT = "result_count"
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │DEFAULT PAGINATION │
+# │DEFAULT PAGINATION                                                                  │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -21,7 +21,7 @@ class DefaultPagination(DynamicPageNumberPagination):
     """ A default pagination class for querysets """
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │CLASS ATTRIBUTES │
+    # │CLASS ATTRIBUTES                                                                │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     # Define page size attributes
@@ -31,7 +31,7 @@ class DefaultPagination(DynamicPageNumberPagination):
     page_size_query_param = "page_size"
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │GET PAGE METADATA │
+    # │GET PAGE METADATA                                                               │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     def get_page_metadata(self):
@@ -46,7 +46,7 @@ class DefaultPagination(DynamicPageNumberPagination):
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │DEFAULT MULTIPLE MODEL PAGINATION │
+# │DEFAULT MULTIPLE MODEL PAGINATION                                                   │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -54,13 +54,13 @@ class DefaultMultipleModelPagination(MultipleModelLimitOffsetPagination):
     """ A default pagination for multiple model viewsets """
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │CLASS ATTRIBUTES │
+    # │CLASS ATTRIBUTES                                                                │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     default_limit = 10
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │FORMAT RESPONSE │
+    # │FORMAT RESPONSE                                                                 │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     def format_response(self, data):

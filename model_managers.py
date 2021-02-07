@@ -1,5 +1,5 @@
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# ││ DJANGO IMPORTS                                                                     │ │
+# │ DJANGO IMPORTS                                                                     │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 from django.contrib.auth.models import BaseUserManager
@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# ││ USER MANAGER MODEL                                                                 │ │
+# │ USER MANAGER MODEL                                                                 │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -15,14 +15,14 @@ class UserManager(BaseUserManager):  # pragma: no cover
     """ A model manager for custom User model """
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # ││ CLASS ATTRIBUTES                                                               │ │
+    # │ CLASS ATTRIBUTES                                                               │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     # Enable this manager for migrations
     use_in_migrations = True
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # ││ _CREATE USER                                                                   │ │
+    # │ _CREATE USER                                                                   │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     def _create_user(self, email, password, **extra_fields):
@@ -43,7 +43,7 @@ class UserManager(BaseUserManager):  # pragma: no cover
         return user
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # ││ CREATE USER                                                                    │ │
+    # │ CREATE USER                                                                    │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     def create_user(self, email, password=None, **extra_fields):
@@ -56,7 +56,7 @@ class UserManager(BaseUserManager):  # pragma: no cover
         return self._create_user(email, password, **extra_fields)
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # ││ CREATE SUPERUSER                                                               │ │
+    # │ CREATE SUPERUSER                                                               │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     def create_superuser(self, email, password, **extra_fields):
@@ -78,7 +78,7 @@ class UserManager(BaseUserManager):  # pragma: no cover
         return self._create_user(email, password, **extra_fields)
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # ││ GET BY NATURAL KEY                                                             │ │
+    # │ GET BY NATURAL KEY                                                             │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     def get_by_natural_key(self, email):
