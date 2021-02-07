@@ -1,12 +1,12 @@
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │ DJANGO IMPORTS                                                                     │
+# ││ DJANGO IMPORTS                                                                     │ │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │ BEUTIL IMPORTS                                                                     │
+# ││ BEUTIL IMPORTS                                                                     │ │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 from beutils.model_fields import CustomEmailField
@@ -16,7 +16,7 @@ from beutils.tools import slugify
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │ BASE USER MODEL                                                                    │
+# ││ BASE USER MODEL                                                                    │ │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -24,7 +24,7 @@ class BaseUser(AbstractUser, FullNameModelMixin, TimeStampedModelMixin):
     """ Custom Base User Model """
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │ UNUSED FIELDS                                                                  │
+    # ││ UNUSED FIELDS                                                                  │ │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     username = None
@@ -33,7 +33,7 @@ class BaseUser(AbstractUser, FullNameModelMixin, TimeStampedModelMixin):
     last_name = models.CharField(max_length=50)
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │ EMAIL                                                                          │
+    # ││ EMAIL                                                                          │ │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     USERNAME_FIELD = "email"
@@ -44,7 +44,7 @@ class BaseUser(AbstractUser, FullNameModelMixin, TimeStampedModelMixin):
     REQUIRED_FIELDS = []  # Removes email from REQUIRED_FIELDS
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │ META                                                                           │
+    # ││ META                                                                           │ │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     class Meta:
@@ -54,14 +54,14 @@ class BaseUser(AbstractUser, FullNameModelMixin, TimeStampedModelMixin):
         verbose_name_plural = "Users"
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │ MODEL MANAGER                                                                  │
+    # ││ MODEL MANAGER                                                                  │ │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     # Use the model manager
     objects = UserManager()
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │ STRING METHOD                                                                  │
+    # ││ STRING METHOD                                                                  │ │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     def __str__(self):
@@ -71,7 +71,7 @@ class BaseUser(AbstractUser, FullNameModelMixin, TimeStampedModelMixin):
         return self.full_name or self.email
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │ SAVE                                                                           │
+    # ││ SAVE                                                                           │ │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     def save(self, *args, **kwargs):
@@ -136,7 +136,7 @@ class BaseUser(AbstractUser, FullNameModelMixin, TimeStampedModelMixin):
         # └────────────────────────────────────────────────────────────────────────────┘
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │ DISPLAY NAME                                                                   │
+    # ││ DISPLAY NAME                                                                   │ │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     @property

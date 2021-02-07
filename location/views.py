@@ -1,18 +1,18 @@
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# DJANGO REST FRAMEWORK IMPORTS
+# │DJANGO REST FRAMEWORK IMPORTS                                                       │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 from drf_multiple_model.viewsets import ObjectMultipleModelAPIViewSet
 from rest_framework import filters
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# BEUTIL IMPORTS
+# │BEUTIL IMPORTS                                                                      │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 from beutils.pagination import DefaultMultipleModelPagination
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# APP IMPORTS
+# │APP IMPORTS                                                                         │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 from beutils.location.models import City, Country, Region, State, Subregion
@@ -25,7 +25,7 @@ from beutils.location.serializers import (
 )
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# LOCATION VIEWSET
+# │LOCATION VIEWSET                                                                    │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -36,7 +36,7 @@ class LocationViewSet(ObjectMultipleModelAPIViewSet):
     """
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # CLASS ATTRIBUTES
+    # │CLASS ATTRIBUTES                                                                │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     # Define pagination class
@@ -51,7 +51,7 @@ class LocationViewSet(ObjectMultipleModelAPIViewSet):
     ]
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # QUERYLIST
+    # │QUERYLIST                                                                       │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     querylist = [

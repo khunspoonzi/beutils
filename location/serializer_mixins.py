@@ -1,12 +1,12 @@
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# DJANGO REST FRAMEWORK IMPORTS
+# │DJANGO REST FRAMEWORK IMPORTS                                                       │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 from dynamic_rest.fields import DynamicRelationField
 from dynamic_rest.serializers import DynamicModelSerializer
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# PROJECT IMPORTS
+# │PROJECT IMPORTS                                                                     │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 from beutils.location.serializers import (
@@ -19,7 +19,7 @@ from beutils.location.serializers import (
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# LOCATION DYNAMIC RELATION SERIALIZER MIXIN
+# │LOCATION DYNAMIC RELATION SERIALIZER MIXIN                                          │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -27,7 +27,7 @@ class LocationDynamicRelationSerializerMixin(DynamicModelSerializer):
     """ A serializer mixin for model serializers with sideloaded location fields """
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # DYNAMIC RELATION FIELDS
+    # │DYNAMIC RELATION FIELDS                                                         │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     # Initialize location-related dynamic relation fields
