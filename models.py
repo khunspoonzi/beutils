@@ -49,6 +49,9 @@ class BaseUser(AbstractUser, FullNameModelMixin, TimeStampedModelMixin):
 
     class Meta:
 
+        # Set abstract to True
+        abstract = True
+
         # Define verbose names
         verbose_name = "User"
         verbose_name_plural = "Users"
