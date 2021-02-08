@@ -26,8 +26,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # │ PROJECT ENVIRONMENT                                                                │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
+# Set project name
+PROJECT_NAME = config("PROJECT_NAME")
+
 # Set debug value
 DEBUG = config("DEBUG", cast=bool, default=False)
+
+# Django Debug Toolbar
+ENABLE_DJANGO_DEBUG_TOOLBAR = config(
+    "ENABLE_DJANGO_DEBUG_TOOLBAR", cast=bool, default=DEBUG
+)
 
 # Django Admin and Browsable API
 ENABLE_DJANGO_ADMIN = config("ENABLE_DJANGO_ADMIN", cast=bool, default=False)
