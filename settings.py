@@ -144,6 +144,8 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "dynamic_rest",
     "drf_multiple_model",
+    # Django Celery Beat
+    "django_celery_beat",
 ]
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
@@ -324,6 +326,25 @@ if ENABLE_BROWSABLE_API:
     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"].append(
         "rest_framework.renderers.BrowsableAPIRenderer",
     )
+
+# ┌────────────────────────────────────────────────────────────────────────────────────┐
+# │ REDIS SETTINGS                                                                     │
+# └────────────────────────────────────────────────────────────────────────────────────┘
+
+# Redis URL
+REDIS_URL = config("REDISTOGO_URL")
+
+# Redis Settings
+BROKER_URL = REDIS_URL
+BROKER_TRANSPORT_OPTIONS = {"visibility_timeout": 3600}
+
+# ┌────────────────────────────────────────────────────────────────────────────────────┐
+# │ CELERY SETTINGS                                                                    │
+# └────────────────────────────────────────────────────────────────────────────────────┘
+
+# Celery Settings
+CELERY_RESULT_BACKEND = REDIS_URL
+CELERY_ALWAYS_EAGER = config("CELERY_ALWAYS_EAGER", cast=bool, default=False)
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
 # │ DJANGO HEROKU SETTINGS                                                             │
