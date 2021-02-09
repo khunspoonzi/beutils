@@ -346,6 +346,12 @@ BROKER_TRANSPORT_OPTIONS = {"visibility_timeout": 3600}
 CELERY_RESULT_BACKEND = REDIS_URL
 CELERY_ALWAYS_EAGER = config("CELERY_ALWAYS_EAGER", cast=bool, default=False)
 
+# Celery On-commit
+ENABLE_CELERY_ON_COMMIT = config("ENABLE_CELERY_ON_COMMIT", cast=bool, default=False)
+
+# Celery Logging
+ENABLE_CELERY_LOGGING = config("ENABLE_CELERY_LOGGING", cast=bool, default=False)
+
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
 # │ DJANGO HEROKU SETTINGS                                                             │
 # └────────────────────────────────────────────────────────────────────────────────────┘
