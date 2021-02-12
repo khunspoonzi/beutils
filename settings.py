@@ -2,6 +2,7 @@
 # │ GENERAL IMPORTS                                                                    │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
+import dj_database_url
 import django_heroku
 import os
 
@@ -211,23 +212,40 @@ TEMPLATES = [
 # │ DATABASE SETTINGS                                                                  │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
-DB_ENGINE = "django.db.backends.postgresql_psycopg2"
-DB_NAME = config("DB_NAME")
-DB_USER = config("DB_USER", default="postgres")
-DB_PASSWORD = config("DB_PASSWORD", default="postgres")
-DB_HOST = config("DB_HOST", default="localhost")
-DB_PORT = config("DB_PORT", cast=int, default=5432)
+# Get database URL
+database_url = config("DATABASE_URL", "")
 
-DATABASES = {
-    "default": {
-        "ENGINE": DB_ENGINE,
-        "NAME": DB_NAME,
-        "USER": DB_USER,
-        "PASSWORD": DB_PASSWORD,
-        "HOST": DB_HOST,
-        "PORT": DB_PORT,
+# Handle case of remote database
+if database_url:
+
+    conn_max_age = config("CONN_MAX_AGE", cast=int, default=600)
+
+    DATABASES = {
+        "default": dj_database_url.parse(
+            database_url, conn_max_age=conn_max_age, ssl_require=True
+        )
     }
-}
+
+# Handle case of local database
+else:
+
+    DB_ENGINE = "django.db.backends.postgresql_psycopg2"
+    DB_NAME = config("DB_NAME")
+    DB_USER = config("DB_USER", default="postgres")
+    DB_PASSWORD = config("DB_PASSWORD", default="postgres")
+    DB_HOST = config("DB_HOST", default="localhost")
+    DB_PORT = config("DB_PORT", cast=int, default=5432)
+
+    DATABASES = {
+        "default": {
+            "ENGINE": DB_ENGINE,
+            "NAME": DB_NAME,
+            "USER": DB_USER,
+            "PASSWORD": DB_PASSWORD,
+            "HOST": DB_HOST,
+            "PORT": DB_PORT,
+        }
+    }
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
 # │ STATIC FILES AND MEDIA SETTINGS                                                    │
