@@ -330,7 +330,10 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
     ),
     "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.NamespaceVersioning",
-    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "dynamic_rest.renderers.DynamicBrowsableAPIRenderer",
+    ],
     "DEFAULT_PARSER_CLASSES": ("rest_framework.parsers.JSONParser",),
 }
 
@@ -342,7 +345,7 @@ if ENABLE_BROWSABLE_API:
 
     # Restrict renderers to JSON renderer
     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"].append(
-        "rest_framework.renderers.BrowsableAPIRenderer",
+        "dynamic_rest.renderers.DynamicBrowsableAPIRenderer"
     )
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
