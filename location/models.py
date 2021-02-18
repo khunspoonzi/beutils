@@ -1,11 +1,13 @@
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │DJANGO IMPORTS                                                                      │
+# │ DJANGO IMPORTS                                                                     │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
+from django.contrib.postgres.fields import ArrayField
+from django.core.exceptions import ValidationError
 from django.db import models
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │PROJECT IMPORTS                                                                     │
+# │ PROJECT IMPORTS                                                                    │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 from beutils.model_mixins import (
@@ -14,10 +16,11 @@ from beutils.model_mixins import (
     TimeStampedModelMixin,
     UniqueNameSlugModelMixin,
 )
+from beutils.tools import slugify
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │REGION                                                                              │
+# │ REGION                                                                             │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -25,7 +28,7 @@ class Region(UniqueNameSlugModelMixin, EmojiModelMixin, TimeStampedModelMixin):
     """ Region Model """
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │META                                                                            │
+    # │ META                                                                           │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     class Meta:
@@ -36,7 +39,7 @@ class Region(UniqueNameSlugModelMixin, EmojiModelMixin, TimeStampedModelMixin):
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │SUBREGION                                                                           │
+# │ SUBREGION                                                                          │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -44,7 +47,7 @@ class Subregion(UniqueNameSlugModelMixin, TimeStampedModelMixin):
     """ Subregion Model """
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │REGION FOREIGN KEY                                                              │
+    # │ REGION FOREIGN KEY                                                             │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     region = models.ForeignKey(
@@ -52,7 +55,7 @@ class Subregion(UniqueNameSlugModelMixin, TimeStampedModelMixin):
     )
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │META                                                                            │
+    # │ META                                                                           │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     class Meta:
@@ -63,7 +66,7 @@ class Subregion(UniqueNameSlugModelMixin, TimeStampedModelMixin):
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │COUNTRY                                                                             │
+# │ COUNTRY                                                                            │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -71,7 +74,7 @@ class Country(UniqueNameSlugModelMixin, EmojiModelMixin, TimeStampedModelMixin):
     """ Country Model """
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │REGION FOREIGN KEY                                                              │
+    # │ REGION FOREIGN KEY                                                             │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     region = models.ForeignKey(
@@ -79,7 +82,7 @@ class Country(UniqueNameSlugModelMixin, EmojiModelMixin, TimeStampedModelMixin):
     )
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │SUBREGION FOREIGN KEY                                                           │
+    # │ SUBREGION FOREIGN KEY                                                          │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     subregion = models.ForeignKey(
@@ -87,7 +90,67 @@ class Country(UniqueNameSlugModelMixin, EmojiModelMixin, TimeStampedModelMixin):
     )
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │SAVE                                                                            │
+    # │ CURRENCY FOREIGN KEY                                                           │
+    # └────────────────────────────────────────────────────────────────────────────────┘
+
+    # currency = models.ForeignKey(
+    #     "currency.Currency",
+    #     related_name="countries",
+    #     on_delete=models.PROTECT,
+    #     blank=True,
+    #     null=True,
+    # )
+
+    # ┌────────────────────────────────────────────────────────────────────────────────┐
+    # │ NAME OFFICIAL                                                                  │
+    # └────────────────────────────────────────────────────────────────────────────────┘
+
+    name_official = models.CharField(
+        max_length=255,
+        unique=True,
+        blank=True,
+    )
+
+    slug_official = models.CharField(
+        max_length=255,
+        unique=True,
+        blank=True,
+    )
+
+    # ┌────────────────────────────────────────────────────────────────────────────────┐
+    # │ NAME NATIVE                                                                    │
+    # └────────────────────────────────────────────────────────────────────────────────┘
+
+    name_native = models.CharField(
+        max_length=255,
+        unique=True,
+        blank=True,
+    )
+
+    # ┌────────────────────────────────────────────────────────────────────────────────┐
+    # │ ISO CODES                                                                      │
+    # └────────────────────────────────────────────────────────────────────────────────┘
+
+    iso2 = models.CharField(max_length=2, unique=True)
+
+    iso3 = models.CharField(max_length=3, unique=True)
+
+    # ┌────────────────────────────────────────────────────────────────────────────────┐
+    # │ PHONE CODES                                                                    │
+    # └────────────────────────────────────────────────────────────────────────────────┘
+
+    phone_codes = ArrayField(ArrayField(models.CharField(max_length=5)), default=list)
+
+    # ┌────────────────────────────────────────────────────────────────────────────────┐
+    # │ DEMONYM AND NATIONALITY                                                        │
+    # └────────────────────────────────────────────────────────────────────────────────┘
+
+    demonym = models.CharField(max_length=255)
+
+    is_nationality = models.BooleanField()
+
+    # ┌────────────────────────────────────────────────────────────────────────────────┐
+    # │ SAVE                                                                           │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     def save(self, *args, **kwargs):
@@ -97,7 +160,30 @@ class Country(UniqueNameSlugModelMixin, EmojiModelMixin, TimeStampedModelMixin):
         # │ PRE-SAVE UPDATED                                                           │
         # └────────────────────────────────────────────────────────────────────────────┘
 
-        # Syncronize parent foreign keys
+        # Iterate over non-null fields
+        for field, display in (
+            (self.name, "name"),
+            (self.name_official, "official name"),
+            (self.name_native, "native name"),
+            (self.iso2, "iso2"),
+            (self.iso3, "iso3"),
+        ):
+
+            # Check if field is null
+            if not field:
+
+                # Raise ValidationError
+                raise ValidationError(f"{display.title()} cannot be an empty string")
+
+        # Ensure that name and official name slugs are lowercased
+        self.slug = slugify(self.name)
+        self.slug_official = slugify(self.name_official)
+
+        # Ensure that ISO2 and ISO3 alpha codes are uppercase
+        self.iso2 = self.iso2.upper().strip()
+        self.iso3 = self.iso3.upper().strip()
+
+        # Synchronize parent foreign keys
         self.region_id = self.subregion.region_id
 
         # ┌────────────────────────────────────────────────────────────────────────────┐
@@ -108,7 +194,7 @@ class Country(UniqueNameSlugModelMixin, EmojiModelMixin, TimeStampedModelMixin):
         super().save(*args, **kwargs)
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │META                                                                            │
+    # │ META                                                                           │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     class Meta:
@@ -119,7 +205,7 @@ class Country(UniqueNameSlugModelMixin, EmojiModelMixin, TimeStampedModelMixin):
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │STATE                                                                               │
+# │ STATE                                                                              │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -127,13 +213,13 @@ class State(NameSlugModelMixin, TimeStampedModelMixin):
     """ State Model """
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │REGION FOREIGN KEY                                                              │
+    # │ REGION FOREIGN KEY                                                             │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     region = models.ForeignKey(Region, related_name="states", on_delete=models.CASCADE)
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │SUBREGION FOREIGN KEY                                                           │
+    # │ SUBREGION FOREIGN KEY                                                          │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     subregion = models.ForeignKey(
@@ -141,7 +227,7 @@ class State(NameSlugModelMixin, TimeStampedModelMixin):
     )
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │COUNTRY FOREIGN KEY                                                             │
+    # │ COUNTRY FOREIGN KEY                                                            │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     country = models.ForeignKey(
@@ -149,7 +235,7 @@ class State(NameSlugModelMixin, TimeStampedModelMixin):
     )
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │SAVE                                                                            │
+    # │ SAVE                                                                           │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     def save(self, *args, **kwargs):
@@ -171,7 +257,7 @@ class State(NameSlugModelMixin, TimeStampedModelMixin):
         super().save(*args, **kwargs)
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │META                                                                            │
+    # │ META                                                                           │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     class Meta:
@@ -182,7 +268,7 @@ class State(NameSlugModelMixin, TimeStampedModelMixin):
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │CITY                                                                                │
+# │ CITY                                                                               │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -190,13 +276,13 @@ class City(NameSlugModelMixin, TimeStampedModelMixin):
     """ City Model """
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │REGION FOREIGN KEY                                                              │
+    # │ REGION FOREIGN KEY                                                             │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     region = models.ForeignKey(Region, related_name="cities", on_delete=models.CASCADE)
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │SUBREGION FOREIGN KEY                                                           │
+    # │ SUBREGION FOREIGN KEY                                                          │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     subregion = models.ForeignKey(
@@ -204,7 +290,7 @@ class City(NameSlugModelMixin, TimeStampedModelMixin):
     )
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │COUNTRY FOREIGN KEY                                                             │
+    # │ COUNTRY FOREIGN KEY                                                            │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     country = models.ForeignKey(
@@ -212,13 +298,13 @@ class City(NameSlugModelMixin, TimeStampedModelMixin):
     )
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │STATE FOREIGN KEY                                                               │
+    # │ STATE FOREIGN KEY                                                              │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     state = models.ForeignKey(State, related_name="cities", on_delete=models.CASCADE)
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │SAVE                                                                            │
+    # │ SAVE                                                                           │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     def save(self, *args, **kwargs):
@@ -241,7 +327,7 @@ class City(NameSlugModelMixin, TimeStampedModelMixin):
         super().save(*args, **kwargs)
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
-    # │META                                                                            │
+    # │ META                                                                           │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
     class Meta:
