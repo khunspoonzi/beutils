@@ -45,7 +45,10 @@ class Migration(migrations.Migration):
                 ),
                 ("name_plural", models.CharField(max_length=255)),
                 ("code", models.CharField(max_length=10, unique=True)),
-                ("number", models.PositiveIntegerField(unique=True)),
+                (
+                    "number",
+                    models.PositiveIntegerField(unique=True, blank=True, null=True),
+                ),
                 ("symbol", models.CharField(max_length=5)),
                 ("symbol_native", models.CharField(max_length=20)),
                 (

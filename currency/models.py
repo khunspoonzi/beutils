@@ -48,7 +48,7 @@ class Currency(UniqueNameSlugModelMixin, TimeStampedModelMixin):
     # │ NUMBER                                                                         │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
-    number = models.PositiveIntegerField(unique=True)
+    number = models.PositiveIntegerField(unique=True, blank=True, null=True)
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
     # │ SYMBOLS                                                                        │
