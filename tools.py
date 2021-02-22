@@ -8,6 +8,19 @@ from unidecode import unidecode
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
+# │ IS TZ AWARE                                                                        │
+# └────────────────────────────────────────────────────────────────────────────────────┘
+
+
+def is_tz_aware(datetime):
+    """ Determined if a datetime object is timezone aware """
+
+    return (
+        datetime.tzinfo is not None and datetime.tzinfo.utcoffset(datetime) is not None
+    )
+
+
+# ┌────────────────────────────────────────────────────────────────────────────────────┐
 # │READ JSON                                                                           │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
