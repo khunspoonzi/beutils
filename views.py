@@ -72,6 +72,33 @@ class ModelViewSet(ContentCaseViewSetMixin, DynamicModelViewSet):
     filter_backends = DynamicModelViewSet.filter_backends + (filters.SearchFilter,)
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
+    # │BULK CREATE                                                                     │
+    # └────────────────────────────────────────────────────────────────────────────────┘
+
+    # /api/v1/{{ model }}/bulk-create/
+    @action(
+        detail=False,
+        methods=("post",),
+        url_path="bulk-create",
+    )
+    def bulk_create(self, request, *args, **kwargs):
+
+        # Get serializer class
+        SerializerClass = self.get_serializer_class()
+
+        # Get serializer
+        serializer = SerializerClass(data=request.data, many=True)
+
+        # Validate serializer
+        serializer.is_valid(raise_exception=True)
+
+        # Save serializer
+        serializer.save()
+
+        # Return 204 response
+        return Response(status=status.HTTP_201_CREATED)
+
+    # ┌────────────────────────────────────────────────────────────────────────────────┐
     # │BULK DELETE                                                                     │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
