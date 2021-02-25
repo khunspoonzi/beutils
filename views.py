@@ -71,6 +71,10 @@ class ModelViewSet(ContentCaseViewSetMixin, DynamicModelViewSet):
     # Apply search filter backend
     filter_backends = DynamicModelViewSet.filter_backends + (filters.SearchFilter,)
 
+    # Initialize bulk create options
+    bulk_create_unique_fields = None
+    bulk_create_update_existing = False
+
     # ┌────────────────────────────────────────────────────────────────────────────────┐
     # │BULK CREATE                                                                     │
     # └────────────────────────────────────────────────────────────────────────────────┘
@@ -85,6 +89,63 @@ class ModelViewSet(ContentCaseViewSetMixin, DynamicModelViewSet):
 
         # Get serializer class
         SerializerClass = self.get_serializer_class()
+
+        # Get unique fields and whether to update existing
+        unique_fields = self.bulk_create_unique_fields
+
+        # Check if unique fields are specified
+        if unique_fields:
+
+            # Determine whether to update existing objects
+            update_existing = self.bulk_create_update_existing
+
+            # Create a new serializer class for the bulk update
+            class SerializerClass(SerializerClass):
+                """ A wrapper for the existing serializer class """
+
+                # Init Method
+                def __init__(self, *args, **kwargs):
+                    """ Custom Init Method """
+
+                    # Call super init method
+                    super().__init__(*args, **kwargs)
+
+                    # Iterate over fields
+                    for field_name, field_object in self.fields.items():
+
+                        pass
+
+                # Meta class
+                class Meta(SerializerClass.Meta):
+                    """ Meta Class """
+
+                # Create Method
+                def create(self, validated_data):
+                    """ Custom Create Method """
+
+                    # Get model
+                    Model = SerializerClass.Meta.model
+
+                    # Get model dict
+                    model_dict = {k: validated_data.pop(k) for k in unique_fields}
+
+                    # Check if existing objects should be updated
+                    if update_existing:
+
+                        # Update or create object
+                        obj, created = Model.objects.update_or_create(
+                            **model_dict, defaults=validated_data
+                        )
+
+                    # Otherwise ignore existing objects
+                    else:
+                        # Get or create object
+                        obj, created = Model.objects.get_or_create(
+                            **model_dict, defaults=validated_data
+                        )
+
+                    # Return object
+                    return obj
 
         # Get serializer
         serializer = SerializerClass(data=request.data, many=True)
