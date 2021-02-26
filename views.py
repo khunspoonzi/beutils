@@ -127,7 +127,11 @@ class ModelViewSet(ContentCaseViewSetMixin, DynamicModelViewSet):
                     Model = SerializerClass.Meta.model
 
                     # Get model dict
-                    model_dict = {k: validated_data.pop(k) for k in unique_fields}
+                    model_dict = {
+                        k: validated_data.pop(k)
+                        for k in unique_fields
+                        if k in validated_data
+                    }
 
                     # Check if existing objects should be updated
                     if update_existing:
