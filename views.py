@@ -152,7 +152,9 @@ class ModelViewSet(ContentCaseViewSetMixin, DynamicModelViewSet):
                     return obj
 
         # Get serializer
-        serializer = SerializerClass(data=request.data, many=True)
+        serializer = SerializerClass(
+            data=request.data, many=True, context={"request": request}
+        )
 
         # Validate serializer
         serializer.is_valid(raise_exception=True)
