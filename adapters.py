@@ -139,8 +139,12 @@ class BaseAdapter:
 
                 # Get value info
                 value_type = info["type"]
+                value_type = value_type if type(value_type) is list else [value_type]
                 value_required = info.get("required", True)
                 value_validator = info.get("validator")
+
+                # Ensure None is handled correctly
+                value_type = [type(t) if t is None else t for t in value_type]
 
                 # Check if key not in item
                 if key not in item:
@@ -152,13 +156,13 @@ class BaseAdapter:
                 value = item[key]
 
                 # Check if value is missing
-                if value_required and not value:
+                if value_required and not value and value is not False:
 
                     # Raise exception
                     raise Exception(f"{label} value for {key} cannot be nullish")
 
                 # Check if value is missing or not the correct type
-                if type(value) is not value_type:
+                if type(value) not in value_type:
 
                     # Raise exception
                     raise Exception(f"{label} {key} is not of type {value_type}")
