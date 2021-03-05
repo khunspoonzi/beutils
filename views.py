@@ -193,11 +193,11 @@ class ModelViewSet(ContentCaseViewSetMixin, DynamicModelViewSet):
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
-# │OBTAIN AUTH TOKEN BASE                                                              │
+# │ AUTH API VIEW                                                                      │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
-class ObtainAuthTokenBase(ContentCaseViewSetMixin, ObtainAuthToken):
+class AuthAPIView(ContentCaseViewSetMixin, ObtainAuthToken):
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
     # │POST                                                                            │
