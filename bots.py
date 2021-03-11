@@ -52,6 +52,15 @@ class BaseBot:
 
         raise NotImplementedError
 
+    # ┌────────────────────────────────────────────────────────────────────────────────┐
+    # │ SEND MESSAGE                                                                   │
+    # └────────────────────────────────────────────────────────────────────────────────┘
+
+    def send_message(self, chat_id, message):
+        """ Sends a message to a recipient / group """
+
+        raise NotImplementedError
+
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
 # │ TELEGRAM BOT                                                                       │
@@ -141,3 +150,13 @@ class TelegramBot(BaseBot):
         self.update_queue.put(
             update
         ) if self.update_queue else self.dispatcher.process_update(update)
+
+    # ┌────────────────────────────────────────────────────────────────────────────────┐
+    # │ SEND MESSAGE                                                                   │
+    # └────────────────────────────────────────────────────────────────────────────────┘
+
+    def send_message(self, chat_id, message):
+        """ Sends a message to a recipient / group """
+
+        # Send message
+        self.bot.send_message(chat_id=chat_id, text=message)
