@@ -228,6 +228,31 @@ class OriginIdModelMixin(models.Model):
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
+# │ TELEGRAM USER MODEL MIXIN                                                          │
+# └────────────────────────────────────────────────────────────────────────────────────┘
+
+
+class TelegramUserModelMixin(models.Model):
+    """ Base model for models with Telegram-related fields """
+
+    # ┌────────────────────────────────────────────────────────────────────────────────┐
+    # │ TELEGRAM CREDENTIALS                                                           │
+    # └────────────────────────────────────────────────────────────────────────────────┘
+
+    telegram_user_id = models.PositiveIntegerField(unique=True, blank=True, null=True)
+    telegram_chat_id = models.PositiveIntegerField(unique=True, blank=True, null=True)
+
+    # ┌────────────────────────────────────────────────────────────────────────────────┐
+    # │ META                                                                           │
+    # └────────────────────────────────────────────────────────────────────────────────┘
+
+    class Meta:
+
+        # Set abstract to True
+        abstract = True
+
+
+# ┌────────────────────────────────────────────────────────────────────────────────────┐
 # │ TIME STAMPED MODEL MIXIN                                                           │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
