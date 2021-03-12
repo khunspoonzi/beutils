@@ -146,10 +146,13 @@ class TelegramBot(BaseBot):
         # Decode data into Update object
         update = Update.de_json(data, self.bot)
 
+        # Get update queue
+        update_queue = self.update_queue
+
         # Pass update into queue or dispatcher
-        self.update_queue.put(
+        update_queue.put(update) if update_queue else self.dispatcher.process_update(
             update
-        ) if self.update_queue else self.dispatcher.process_update(update)
+        )
 
     # ┌────────────────────────────────────────────────────────────────────────────────┐
     # │ SEND MESSAGE                                                                   │
