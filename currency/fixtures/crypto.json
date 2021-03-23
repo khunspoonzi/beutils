@@ -1,0 +1,42 @@
+[
+    {
+        "name": "Bitcoin",
+        "code": "BTC"
+    },
+    {
+        "name": "Ethereum",
+        "code": "ETH"
+    },
+    {
+        "name": "Tether",
+        "code": "USDT"
+    },
+    {
+        "name": "Binance Coin",
+        "code": "BNB"
+    },
+    {
+        "name": "Cardano",
+        "code": "ADA"
+    },
+    {
+        "name": "Polkadot",
+        "code": "DOT"
+    },
+    {
+        "name": "Ripple",
+        "code": "XRP"
+    },
+    {
+        "name": "Uniswap",
+        "code": "UNI"
+    },
+    {
+        "name": "Litecoin",
+        "code": "LTC"
+    },
+    {
+        "name": "Theta",
+        "code": "THETA"
+    }
+]
