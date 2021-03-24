@@ -1,14 +1,14 @@
-# -------------------------------------------------------------------------------------
-# GENERAL IMPORTS
-# -------------------------------------------------------------------------------------
+# ┌────────────────────────────────────────────────────────────────────────────────────┐
+# │ GENERAL IMPORTS                                                                    │
+# └────────────────────────────────────────────────────────────────────────────────────┘
 
 import debug_toolbar
 
 from urllib.parse import urljoin
 
-# -------------------------------------------------------------------------------------
-# DJANGO IMPORTS
-# -------------------------------------------------------------------------------------
+# ┌────────────────────────────────────────────────────────────────────────────────────┐
+# │ DJANGO IMPORTS                                                                     │
+# └────────────────────────────────────────────────────────────────────────────────────┘
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -16,9 +16,9 @@ from django.contrib import admin
 from django.urls import include, path
 
 
-# -------------------------------------------------------------------------------------
-# ADMIN CUSTOMIZATION
-# -------------------------------------------------------------------------------------
+# ┌────────────────────────────────────────────────────────────────────────────────────┐
+# │ ADMIN CUSTOMIZATION                                                                │
+# └────────────────────────────────────────────────────────────────────────────────────┘
 
 # Get project name
 project_name = settings.PROJECT_NAME
@@ -34,14 +34,12 @@ admin.site.site_title = TITLE
 admin.site.site_header = TITLE
 admin.site.index_title = "Admin Panel"
 
-# -------------------------------------------------------------------------------------
-# URL PATTERNS
-# -------------------------------------------------------------------------------------
+# ┌────────────────────────────────────────────────────────────────────────────────────┐
+# │ URL PATTERNS                                                                       │
+# └────────────────────────────────────────────────────────────────────────────────────┘
 
 # URL Patterns List
-urlpatterns = [
-    path("__debug__/", include(debug_toolbar.urls)),
-]
+urlpatterns = []
 
 # Locale-specific URL Patterns
 for api_version in settings.API_VERSIONS:
@@ -54,17 +52,39 @@ for api_version in settings.API_VERSIONS:
         path(api_route, include(("api.urls", "api"), namespace=api_version))
     ]
 
+# ┌────────────────────────────────────────────────────────────────────────────────────┐
+# │ DJANGO ADMIN                                                                       │
+# └────────────────────────────────────────────────────────────────────────────────────┘
+
 # Admin URL Pattern
 if settings.ENABLE_DJANGO_ADMIN:
 
     # Django Admin
     urlpatterns += [path("admin/", admin.site.urls)]
 
+# ┌────────────────────────────────────────────────────────────────────────────────────┐
+# │ BROWSABLE API                                                                      │
+# └────────────────────────────────────────────────────────────────────────────────────┘
+
 # Browsable API URL Pattern
 if settings.ENABLE_BROWSABLE_API:
 
     # Browsable API
     urlpatterns += [path("auth/", include("rest_framework.urls"))]
+
+# ┌────────────────────────────────────────────────────────────────────────────────────┐
+# │ DJANGO DEBUG TOOLBAR                                                               │
+# └────────────────────────────────────────────────────────────────────────────────────┘
+
+# Django Debug Toolbar Pattern
+if settings.ENABLE_DJANGO_DEBUG_TOOLBAR:
+
+    # Django Debug Toolbar
+    urlpatterns += [path("__debug__/", include(debug_toolbar.urls))]
+
+# ┌────────────────────────────────────────────────────────────────────────────────────┐
+# │ LOCAL ENVIRONMENT                                                                  │
+# └────────────────────────────────────────────────────────────────────────────────────┘
 
 # Check if environment is local
 if settings.ENVIRONMENT == settings.LOCAL:

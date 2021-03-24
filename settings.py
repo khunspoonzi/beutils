@@ -133,8 +133,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Django Debug Toolbar
-    "debug_toolbar",
     # Django Extensions
     "django_extensions",
     # Django Storages
@@ -162,8 +160,20 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
+
+# ┌────────────────────────────────────────────────────────────────────────────────────┐
+# │ DJANGO DEBUG TOOLBAR                                                               │
+# └────────────────────────────────────────────────────────────────────────────────────┘
+
+# Check if Django Debug Toolbar is enabled
+if ENABLE_DJANGO_DEBUG_TOOLBAR:
+
+    # Append debug toolbar to installed apps
+    INSTALLED_APPS.append("debug_toolbar")
+
+    # Append debug toolbar middleware to middleware
+    MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
 # │ PASSWORD VALIDATORS                                                                │
