@@ -42,6 +42,32 @@ def read_json(path):
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
+# │ REDUCE CHOICE GROUPS                                                               │
+# └────────────────────────────────────────────────────────────────────────────────────┘
+
+
+def reduce_choice_groups(*choice_groups):
+    """
+    Reduces choice groups from a list of tuples to a list of strings in place
+
+    e.g.
+        [[("waiting", "Waiting"), ("active", "Active")], [("inactive", "Inactive")]]
+        [["waiting", "active"], ["inactive"]]
+
+    Used for filtering of choice fields
+    """
+
+    # Iterate over choice groups
+    for choice_group in choice_groups:
+
+        # Iterate over choice group indices
+        for i in range(len(choice_group)):
+
+            # Remove display from choice
+            choice_group[i] = choice_group[i][0]
+
+
+# ┌────────────────────────────────────────────────────────────────────────────────────┐
 # │SLUGIFY                                                                             │
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
