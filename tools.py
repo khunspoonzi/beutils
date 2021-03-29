@@ -57,14 +57,29 @@ def reduce_choice_groups(*choice_groups):
     Used for filtering of choice fields
     """
 
+    # Initialize all choices
+    all_choices = []
+
     # Iterate over choice groups
     for choice_group in choice_groups:
 
         # Iterate over choice group indices
         for i in range(len(choice_group)):
 
+            # Get choice without display
+            choice = choice_group[i][0]
+
             # Remove display from choice
-            choice_group[i] = choice_group[i][0]
+            choice_group[i] = choice
+
+            # Check if choice not in all choices
+            if choice not in all_choices:
+
+                # Append choice to all choices
+                all_choices.append(choice)
+
+    # Return all choices
+    return all_choices
 
 
 # ┌────────────────────────────────────────────────────────────────────────────────────┐
