@@ -54,7 +54,7 @@ class Currency(UniqueNameSlugModelMixin, TimeStampedModelMixin):
     # │ SYMBOLS                                                                        │
     # └────────────────────────────────────────────────────────────────────────────────┘
 
-    symbol = models.CharField(max_length=5)
+    symbol = models.CharField(max_length=10)
 
     symbol_native = models.CharField(max_length=20)
 
