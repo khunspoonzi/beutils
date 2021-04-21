@@ -87,7 +87,7 @@ def reduce_choice_groups(*choice_groups):
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 
-def slugify(string, decode=True):
+def slugify(string, decode=True, space=None):
     """ Returns a slugified version of a string input """
 
     # Return empty string if no text value passed
@@ -100,6 +100,12 @@ def slugify(string, decode=True):
 
     # Lowercase and strip slug
     string = string.lower().strip()
+
+    # Check if space is a string
+    if type(space) is str:
+
+        # Replace spaces with the specified character
+        string = string.replace(" ", space)
 
     # Return slugified string
     return string
