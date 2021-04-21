@@ -3,6 +3,7 @@
 # └────────────────────────────────────────────────────────────────────────────────────┘
 
 import json
+import pytz
 
 from unidecode import unidecode
 
@@ -109,3 +110,31 @@ def slugify(string, decode=True, space=None):
 
     # Return slugified string
     return string
+
+
+# ┌────────────────────────────────────────────────────────────────────────────────────┐
+# │ TO UTC                                                                             │
+# └────────────────────────────────────────────────────────────────────────────────────┘
+
+
+def to_utc(dt):
+    """ Converts a datetime object to UTC """
+
+    # Get UTC
+    UTC = pytz.UTC
+
+    # Get tzinfo
+    tzinfo = dt.tzinfo
+
+    # Return datetime if already UTC
+    if tzinfo == UTC:
+        return dt
+
+    # Check if datetime is naive
+    if not tzinfo:
+
+        # Return datetime localized to UTC
+        return UTC.localize(dt)
+
+    # Otherwise convert an already timezone aware datetime to UTC
+    return dt.astimezone(UTC)
