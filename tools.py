@@ -120,6 +120,10 @@ def slugify(string, decode=True, space=None):
 def to_utc(dt):
     """ Converts a datetime object to UTC """
 
+    # Return if datetime is null
+    if not dt:
+        return dt
+
     # Get UTC
     UTC = pytz.UTC
 
